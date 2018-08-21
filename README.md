@@ -1,4 +1,4 @@
-# ground_reservation
+# Ground Reservation using MEVN stack
 
 ## Project setup
 ```

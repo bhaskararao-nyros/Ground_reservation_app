@@ -1,61 +1,9 @@
 <template>
   <div class="hello">
-    <header class="filds_hdr">
-      <nav class="navbar navbar-default">
-        <div class="container">
-        <!-- logo start -->
-          <div class="navbar-header">
-          <span class="togle_icon" id="menu" onclick="toggleMenu()"><img src="../assets/img/toggle_icon.png"> </span>
-            <a class="navbar-brand brnd_logo" href="#"><img src="../assets/img/logo.png" /></a>
-          </div>
-          <!-- logo end -->
-          <!-- page title start -->
-          <h3 class="pag_title">Town of Flower Mound - Fields Manager</h3>
-          <!-- page title end -->
-          <!-- profile dropdown start -->
-          <div class="dropdown prf_drp">
-            <button class="btn btn-default dropdown-toggle prf_drp_btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <i>J</i>
-          <!-- <span class="caret"></span> -->
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="#">Option One</a></li>
-              <li><a href="#">Option Two</a></li>
-              <li><a href="#">Option Three</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Logout</a></li>
-            </ul>
-          </div>
-      <!-- profile dropdown end -->
-        </div>
-      </nav>
-    </header>
+    <HeaderComponent />
 <!--  header end -->
 <!-- side menu start -->
-    <div class="side_nav" id="menu-box">
-      <ul>
-        <li class="active"><a href="index.html">
-          <img class="nav_normal" src="../assets/img/forma_icon.png" />
-          <img class="nav_active" src="../assets/img/forma_active_icon.png" />
-          <span>Slots</span>
-        </a></li>
-        <li><a href="grounds.html">
-          <img class="nav_normal" src="../assets/img/nav_two_icon.png" />
-          <img class="nav_active" src="../assets/img/nav_two_active_icon.png" />
-          <span>Grounds</span>
-        </a></li>
-        <li><a href="admins_view.html">
-          <img class="nav_normal" src="../assets/img/user_icon.png" />
-          <img class="nav_active" src="../assets/img/user_active_icon.png" />
-          <span>Admin</span>
-        </a></li>
-        <li><a href="parks_list.html">
-          <img class="nav_normal" src="../assets/img/park_icon.png" />
-          <img class="nav_active" src="../assets/img/park_active_icon.png" />
-          <span>Parks List</span>
-        </a></li>
-      </ul>
-    </div>
+    <SidebarComponent />
 <!-- side menu end -->
 
 <!-- content start -->
@@ -94,7 +42,7 @@
 
 
           <div class="clndr_blk">
-            <img src="../assets/img/calendar.png" />
+            <full-calendar :events="events" @render-event="eventSelected" />
           </div>
           
         </div>
@@ -849,14 +797,40 @@
 </template>
 <script>
 
+import HeaderComponent from '@/components/Header'
+import SidebarComponent from '@/components/Sidebar'
+
 export default {
+  data() {
+    return {
+      events: [
+        {
+          title  : 'event1',
+          start  : '2018-08-19',
+        },
+        {
+          title  : 'event2',
+          start  : '2010-01-05',
+          end    : '2010-01-07',
+        },
+        {
+          title  : 'event3',
+          start  : '2018-08-20T12:30:00',
+          allDay : false
+        }
+      ]
+    }
+  },
   name: 'HelloWorld',
   props: {
-    
+  },
+  methods: {
+  },
+  components: {
+    HeaderComponent,
+    SidebarComponent
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

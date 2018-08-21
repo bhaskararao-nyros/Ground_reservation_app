@@ -1,17 +1,26 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App.vue'
-import FullCalendar from "vue-full-calendar";
+import App from './App'
+import router from './router'
+import FullCalendar from 'vue-full-calendar'
+import Notifications from 'vue-notification'
 
 import './assets/css/bootstrap.min.css'
 import './assets/css/style.css'
-import "fullcalendar-scheduler";
-import "fullcalendar/dist/fullcalendar.min.css";
-import "fullcalendar-scheduler/dist/scheduler.min.css";
+import 'fullcalendar-scheduler'
+import 'fullcalendar/dist/fullcalendar.min.css'
+import 'fullcalendar-scheduler/dist/scheduler.min.css'
 
-
+Vue.use(FullCalendar)
+Vue.use(Notifications)
 
 Vue.config.productionTip = false
 
+/* eslint-disable no-new */
 new Vue({
-  render: h => h(App)
-}).$mount('#app')
+  el: '#app',
+  router,
+  components: { App },
+  template: '<App/>'
+})
