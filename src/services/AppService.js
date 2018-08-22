@@ -12,5 +12,29 @@ export default {
   },
   deletePark (params) {
     return Api().post('/delete_park', params)
-  }
+  },
+  addGround (params) {
+    return Api().post('/add_ground', params)
+  },
+  getGrounds () {
+    return Api().get('/get_grounds')
+  },
+  updateGround (params) {
+    return Api().post('/update_ground', params)
+  },
+  deleteGround (params) {
+    return Api().post('/delete_ground', params)
+  },
+  addAdmin (params) {
+  	return Api().post('/add_admin', params)
+  },
+  getAdmins () {
+    return Api().get('/get_admins')
+  },
+  updateAdmin (params) {
+    return Api().post('/update_admin', params)
+  },
+  deleteAdmin (params) {
+    return Api().post('/delete_admin', params)
+  },
 }

@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import FullCalendar from 'vue-full-calendar'
 import Notifications from 'vue-notification'
+import Popover from 'vue-js-popover'
 
 import './assets/css/bootstrap.min.css'
 import './assets/css/style.css'
@@ -14,6 +15,7 @@ import 'fullcalendar-scheduler/dist/scheduler.min.css'
 
 Vue.use(FullCalendar)
 Vue.use(Notifications)
+Vue.use(Popover)
 
 Vue.config.productionTip = false
 

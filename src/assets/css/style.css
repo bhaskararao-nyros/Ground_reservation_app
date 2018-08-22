@@ -329,7 +329,7 @@ font-family: 'latoregular';padding: 5px 20px;float: left;margin-right: 5px;posit
 .cls_pill{display: none;position: absolute;top: -2px;right: 8px;cursor: pointer;}
 .cls_pill img{width: 8px;}
 .sprts_pills ul li:hover .cls_pill{display: block;}
-.more_sprts{float: left;position: relative;top: 5px;font-size: 28px;color: #b3b3b3!important;text-decoration: none!important;}
+.more_sprts{float: left;position: relative;top: 5px;font-size: 28px;color: #b3b3b3!important;text-decoration: none!important;cursor: pointer !important;}
 .pop_over_pills ul li{float: none;margin: 5px 0;}
 .lst_actns{float: right;}
 .lst_dlt_icn, .lst_edit_icn{width: 40px;height: 34px;text-align: center;display: block;border-radius: 5px;line-height: 34px;
