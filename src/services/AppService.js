@@ -37,4 +37,13 @@ export default {
   deleteAdmin (params) {
     return Api().post('/delete_admin', params)
   },
+  addSingleSlot (params) {
+    return Api().post('/add_single_slot', params)
+  },
+  addSlotSchedule (params) {
+    return Api().post('/add_slot_schedule', params)
+  },
+  getAvailableSlots () {
+    return Api().get('/get_available_slots')
+  },
 }

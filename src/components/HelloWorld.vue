@@ -42,7 +42,7 @@
 
 
           <div class="clndr_blk">
-            <full-calendar :events="events" @render-event="eventSelected" />
+            <full-calendar :events="events" />
           </div>
           
         </div>
@@ -124,50 +124,54 @@
 
             <!-- Tab panes -->
             <div class="tab-content add_slot_cntnt">
-            <div role="tabpanel" class="tab-pane active" id="home">
-            <div class="single_slot">
-              <form>
-              <div class="row">
-              <div class="col-md-12">
-                <div class="grnd_slct">
-                <select disabled class="disabled_slct">
-                <option>Bakers Field</option>
-                <option>Bakers Field one</option>
-                <option>Bakers Field two</option>
-                <option>Bakers Field three</option>
-                </select>
+              <div role="tabpanel" class="tab-pane active" id="home">
+                <div class="single_slot">
+                  <form>
+                  <div class="row">
+                  <div class="col-md-12">
+                    <div class="grnd_slct">
+                    <select v-model="slot.gr_name">
+                      <option value="select">Select</option>
+                      <option v-for="ground in grounds" :value="ground.name">{{ ground.name }}</option>
+                    </select>
+                    </div>
+                  </div>
+                  </div>
+                    <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                    <input type="date" class="form-control" v-model="slot.start_date" placeholder="Start Date">
+                    <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                    <input type="time" class="form-control" v-model="slot.from_time" placeholder="From Time">
+                    <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                    <input type="time" class="form-control" v-model="slot.to_time" placeholder="To Time">
+                    <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="form_btns">
+                      <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal" ref="close_single_slot_modal">
+                        <img src="../assets/img/cancel_icon.png" />
+                      </button>
+                      <button type="button" class="btn btn-primary save_btn" @click="addSingleSlot">
+                        <img src="../assets/img/save_icon.png" />
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
-              </div>
-                <div class="row">
-                <div class="col-md-12">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Start Date">
-                <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-
-                </div>
-                <div class="row">
-                <div class="col-md-6">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="From Time">
-                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-
-                <div class="col-md-6">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="To Time">
-                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-                </div>
-              </form>
-            </div>
-
-
-            </div>
 
             <div role="tabpanel" class="tab-pane" id="profile">
             <div class="single_slot">
@@ -175,11 +179,9 @@
               <div class="row">
               <div class="col-md-12">
                 <div class="grnd_slct">
-                <select disabled class="disabled_slct">
-                <option>Bakers Field</option>
-                <option>Bakers Field one</option>
-                <option>Bakers Field two</option>
-                <option>Bakers Field three</option>
+                <select v-model="slot_sc.gr_name">
+                  <option value="select">Select</option>
+                  <option v-for="ground in grounds" :value="ground.name">{{ ground.name }}</option>
                 </select>
                 </div>
               </div>
@@ -187,13 +189,13 @@
                 <div class="row">
                 <div class="col-md-6">
                 <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Start Date">
+                <input type="date" class="form-control" v-model="slot_sc.start_date" placeholder="Start Date">
                 <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="End Date">
+                <input type="date" class="form-control" v-model="slot_sc.end_date" placeholder="End Date">
                 <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
                 </div>
                 </div>
@@ -202,14 +204,14 @@
                 <div class="row">
                 <div class="col-md-6">
                 <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="From Time">
+                <input type="time" class="form-control" v-model="slot_sc.from_time" placeholder="From Time">
                 <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
                 </div>
                 </div>
 
                 <div class="col-md-6">
                 <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="To Time">
+                <input type="time" class="form-control" v-model="slot_sc.to_time" placeholder="To Time">
                 <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
                 </div>
                 </div>
@@ -219,7 +221,7 @@
                   <ul class="week_chck_box">
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check1" name="check" value="false">
+                  <input type="checkbox" id="check1"  v-model="slot_sc.week_days" name="check" value="Mon">
                   <label for="check1"></label>
                   </div>
                   <span>Mon</span>
@@ -227,7 +229,7 @@
 
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check2" name="check" value="false">
+                  <input type="checkbox" id="check2"  v-model="slot_sc.week_days" name="check" value="Tue">
                   <label for="check2"></label>
                   </div>
                   <span>Tue</span>
@@ -235,7 +237,7 @@
 
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check3" name="check" value="false">
+                  <input type="checkbox" id="check3"  v-model="slot_sc.week_days" name="check" value="Wed">
                   <label for="check3"></label>
                   </div>
                   <span>Wed</span> 
@@ -243,7 +245,7 @@
 
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check4" name="check" value="false">
+                  <input type="checkbox" id="check4"  v-model="slot_sc.week_days" name="check" value="Thu">
                   <label for="check4"></label>
                   </div>
                   <span>Thu</span>
@@ -251,7 +253,7 @@
 
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check5" name="check" value="false"><!-- checked -->
+                  <input type="checkbox" id="check5"  v-model="slot_sc.week_days" name="check" value="Fri"><!-- checked -->
                   <label for="check5"></label>
                   </div>
                   <span>Fri</span>
@@ -259,7 +261,7 @@
 
                   <li>
                   <div class="check_div">
-                  <input type="checkbox" id="check6" name="check" value="false"><!-- checked -->
+                  <input type="checkbox" id="check6"  v-model="slot_sc.week_days" name="check" value="Sat"><!-- checked -->
                   <label for="check6"></label>
                   </div>
                   <span>Sat</span>
@@ -268,20 +270,20 @@
                   </ul>
                   </div>
                 </div>
+                <div class="form_btns">
+                  <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal" ref="close_slot_sc_modal">
+                    <img src="../assets/img/cancel_icon.png" />
+                  </button>
+                  <button type="button" class="btn btn-primary save_btn" @click="addSlotSchedule">
+                    <img src="../assets/img/save_icon.png" />
+                  </button>
+                </div>
               </form>
             </div>
             </div>
             </div>
 
             </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal">
-                  <img src="../assets/img/cancel_icon.png" />
-                </button>
-                <button type="button" class="btn btn-primary save_btn">
-                  <img src="../assets/img/save_icon.png" />
-                </button>
               </div>
             </div>
           </div>
@@ -799,32 +801,102 @@
 
 import HeaderComponent from '@/components/Header'
 import SidebarComponent from '@/components/Sidebar'
+import AppService from '@/services/AppService'
+
+
+var cal_events = [
+  {
+    title  : 'event1',
+    start  : '2018-08-23',
+    end  : '2018-08-27',
+    color : 'green'
+  },
+  {
+    title  : 'event2',
+    start  : '2010-01-05',
+    end    : '2010-01-07',
+  },
+  {
+    title  : 'event3',
+    start  : '2018-08-20T12:30:00',
+    allDay : false
+  }
+];
 
 export default {
   data() {
     return {
-      events: [
-        {
-          title  : 'event1',
-          start  : '2018-08-19',
-        },
-        {
-          title  : 'event2',
-          start  : '2010-01-05',
-          end    : '2010-01-07',
-        },
-        {
-          title  : 'event3',
-          start  : '2018-08-20T12:30:00',
-          allDay : false
-        }
-      ]
+      events: cal_events,
+      grounds:[],
+      slot:{ gr_name: 'select', start_date:'', to_time:'', from_time:'' },
+      slot_sc:{ gr_name: 'select', start_date:'', to_time:'', from_time:'', week_days:[] }
     }
   },
   name: 'HelloWorld',
   props: {
   },
   methods: {
+    async getGrounds () {
+      const res = await AppService.getGrounds()
+      console.log('grounds @@@', res.data)
+      this.grounds = res.data.data
+    },
+    async getAvailableSlots () {
+      const res = await AppService.getAvailableSlots()
+      console.log('availble slots @@@', res.data)
+      let availble_slots = res.data.data;
+      for (var i = 0; i < availble_slots.length; i++) {
+        let start_date, end_date;
+          start_date = availble_slots[i].start_date +'T'+ availble_slots[i].from_time+':00'
+          end_date = availble_slots[i].end_date +'T'+ availble_slots[i].to_time+':00'
+        let obj = {
+          title: availble_slots[i].gr_name,
+          start: start_date, 
+          end : end_date,
+          color: 'green'
+        }
+        this.events.push(obj)
+      }
+    },
+    async addSingleSlot () {
+      const res = await AppService.addSingleSlot(this.slot)
+      console.log('Single Slot @@@', res.data)
+      this.assignTimeDateOnload()
+    },
+    async addSlotSchedule () {
+      const res = await AppService.addSlotSchedule(this.slot_sc)
+      console.log('Slot Schedule @@@', res.data)
+      this.assignTimeDateOnload()
+    },
+    timeNow () {
+      var d = new Date(),
+          h = (d.getHours()<10?'0':'') + d.getHours(),
+          m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+      var value = h + ':' + m;
+      return value;
+    },
+    dateNow () {
+      var now = new Date(),
+        day = ("0" + now.getDate()).slice(-2),
+        month = ("0" + (now.getMonth() + 1)).slice(-2);
+      var today = now.getFullYear()+"-"+(month)+"-"+(day)
+      return today;
+    },
+    assignTimeDateOnload () {
+      let time = this.timeNow()
+      this.slot.to_time = time
+      this.slot.from_time = time
+      this.slot.start_date = this.dateNow()
+      this.slot_sc.to_time = time
+      this.slot_sc.from_time = time
+      this.slot_sc.start_date = this.dateNow()
+      this.slot_sc.end_date = this.dateNow()
+    }
+  },
+  mounted () {
+    this.getGrounds()
+    this.getAvailableSlots()
+    this.assignTimeDateOnload()
   },
   components: {
     HeaderComponent,
@@ -833,4 +905,8 @@ export default {
 }
 </script>
 <style scoped>
+.form_btns {
+  float: right;
+  margin-bottom: 3%;
+}
 </style>

@@ -4,6 +4,7 @@ const router = express.Router();
 const Park = require('../models/park');
 const Ground = require('../models/ground');
 const Admin = require('../models/admin');
+const Slot = require('../models/slot');
 
 router.use('/add_park',function(req, res){
 	console.log('--------adding park-----------')
@@ -188,6 +189,50 @@ router.use('/delete_admin',function(req, res){
 	});
 });
 
+router.use('/add_single_slot',function(req, res){
+	console.log('------addding single slot-------');
+	new Slot({
+		gr_name : req.body.gr_name,
+		start_date : req.body.start_date,
+		end_date : req.body.end_date,
+		from_time : req.body.from_time,
+		to_time : req.body.to_time,
+		week_days : req.body.week_days,
+	}).save(function(err1, slot1){
+       res.json({
+       	status:'success',
+       	message : 'Slot added successfully',
+       	data : slot1
+       })
+	})
+});
+
+router.use('/add_slot_schedule',function(req, res){
+	console.log('------addding slot schedule-------')
+	new Slot({
+		gr_name : req.body.gr_name,
+		start_date : req.body.start_date,
+		end_date : req.body.end_date,
+		from_time : req.body.from_time,
+		to_time : req.body.to_time,
+		week_days : req.body.week_days,
+	}).save(function(err1, dateSlot1){
+       res.json({
+       	status:'success',
+       	message : 'Slot added successfully',
+       	data : dateSlot1
+       })
+	})
+});
+
+router.use('/get_available_slots',function(req, res){
+	console.log('--------getting available slots-----------')
+
+	getAvailableSlots(function(callback){
+	 	res.json(callback)
+	});
+})
+
 
 function getParks(callback) {
 	Park.find({},function(err, park){
@@ -217,6 +262,17 @@ function getAdmins(callback) {
 			status:'success',
 			message : 'Admins fetched',	
 			data : admin
+		};
+		callback(obj);
+	})
+}
+
+function getAvailableSlots(callback) {
+	Slot.find({},function(err, slots){
+		obj = {
+			status:'success',
+			message : 'Slots fetched',	
+			data : slots
 		};
 		callback(obj);
 	})
