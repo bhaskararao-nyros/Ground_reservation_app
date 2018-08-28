@@ -198,6 +198,7 @@ router.use('/add_single_slot',function(req, res){
 		from_time : req.body.from_time,
 		to_time : req.body.to_time,
 		week_days : req.body.week_days,
+		color : req.body.color,
 	}).save(function(err1, slot1){
        res.json({
        	status:'success',
@@ -216,6 +217,7 @@ router.use('/add_slot_schedule',function(req, res){
 		from_time : req.body.from_time,
 		to_time : req.body.to_time,
 		week_days : req.body.week_days,
+		color : req.body.color,
 	}).save(function(err1, dateSlot1){
        res.json({
        	status:'success',
@@ -232,6 +234,58 @@ router.use('/get_available_slots',function(req, res){
 	 	res.json(callback)
 	});
 })
+
+router.use('/update_single_slot',function(req, res){
+	console.log('--------updating single slot-----------')
+	Slot.findByIdAndUpdate(req.body._id,{$set:req.body}, function(err, result){
+        if(!err) {
+            getAvailableSlots(function(callback){
+			 	res.json(callback)
+			});
+        } else {
+        	res.send('error');
+        }
+    });
+});
+
+router.use('/update_slot_schedule',function(req, res){
+	console.log('--------updating slot schedule-----------')
+	Slot.findByIdAndUpdate(req.body._id,{$set:req.body}, function(err, result){
+        if(!err) {
+            getAvailableSlots(function(callback){
+			 	res.json(callback)
+			});
+        } else {
+        	res.send('error');
+        }
+    });
+});
+
+router.use('/cancel_slot_schedule',function(req, res){
+	console.log('--------cancelling slot schedule-----------')
+	Slot.findByIdAndUpdate(req.body._id,{$set:{ color : 'grey' }}, function(err, result){
+        if(!err) {
+            getAvailableSlots(function(callback){
+			 	res.json(callback)
+			});
+        } else {
+        	res.send('error');
+        }
+    });
+});
+
+router.use('/cancel_single_slot',function(req, res){
+	console.log('--------cancelling single slot-----------')
+	Slot.findByIdAndUpdate(req.body._id,{$set:{ color : 'grey' }}, function(err, result){
+        if(!err) {
+            getAvailableSlots(function(callback){
+			 	res.json(callback)
+			});
+        } else {
+        	res.send('error');
+        }
+    });
+});
 
 
 function getParks(callback) {

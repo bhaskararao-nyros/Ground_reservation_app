@@ -7,6 +7,7 @@ var slotSchema = new mongoose.Schema({
   from_time: { type: String },
   to_time: { type: String },
   week_days: { type: Array },
+  color: { type: String },
     }, {
   timestamps: true
 });

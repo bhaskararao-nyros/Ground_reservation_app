@@ -46,4 +46,16 @@ export default {
   getAvailableSlots () {
     return Api().get('/get_available_slots')
   },
+  updateSingleSlot (params) {
+    return Api().post('/update_single_slot', params)
+  },
+  updateSlotSchedule (params) {
+    return Api().post('/update_slot_schedule', params)
+  },
+  cancelSlotSchedule (params) {
+    return Api().post('/cancel_slot_schedule', params)
+  },
+  cancelSingleSlot (params) {
+    return Api().post('/cancel_single_slot', params)
+  }
 }

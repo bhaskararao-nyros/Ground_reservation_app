@@ -42,7 +42,7 @@
 
 
           <div class="clndr_blk">
-            <full-calendar :events="events" />
+            <full-calendar @event-selected="slotSelected" :events="events" />
           </div>
           
         </div>
@@ -78,21 +78,11 @@
         </div>
       </form>
       <div class="park_pie">
-        <img src="../assets/img/park_pie.png" />
-        <ul>
-          <li class="reserved_blk">
-            <i></i>
-            <span>Reserved</span>
-          </li>
-          <li class="available_blk">
-            <i></i>
-            <span>Available</span>
-          </li>
-          <li class="requested_blk">
-            <i></i>
-            <span>Requested</span>
-          </li>
-        </ul>
+        <GChart
+          type="PieChart"
+          :data="chartData"
+          :options="chartOptions"
+        />
       </div>
       </div>
       </div>
@@ -289,6 +279,205 @@
           </div>
         </div>
         <!-- add slot modal end -->
+
+        <button type="button" ref="edit_slot_btn" class="hide btn btn-primary btn-lg add_slot_btn" data-toggle="modal" data-target="#editSlot">Edit Slot</button>
+
+        <!-- edit slot modal start -->
+        <div class="modal fade add_slot_modal" id="editSlot" tabindex="-1" role="dialog" aria-labelledby="addSlotLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <img src="../assets/img/close_icon.png" />
+                </button>
+                <h4 class="modal-title" id="addSlotLabel">Edit Slot</h4>
+              </div>
+              <div class="modal-body">
+            <div class="add_slot_tabs">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#edit_home" aria-controls="home" role="tab" data-toggle="tab">Single Slot</a></li>
+            <li role="presentation"><a href="#edit_profile" aria-controls="profile" role="tab" data-toggle="tab">Slot Schedule</a></li>
+            </ul>
+            <div class="clr">&nbsp;</div>
+            <hr class="tab_brder" />
+            
+
+            <!-- Tab panes -->
+            <div class="tab-content add_slot_cntnt">
+              <div role="tabpanel" class="tab-pane active" id="edit_home">
+                <div class="single_slot">
+                  <form>
+                  <div class="row">
+                  <div class="col-md-12">
+                    <div class="grnd_slct">
+                    <select v-model="slot.gr_name">
+                      <option value="select">Select</option>
+                      <option v-for="ground in grounds" :value="ground.name">{{ ground.name }}</option>
+                    </select>
+                    </div>
+                  </div>
+                  </div>
+                    <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                    <input type="date" class="form-control" v-model="slot.start_date" placeholder="Start Date">
+                    <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                    <input type="time" class="form-control" v-model="slot.from_time" placeholder="From Time">
+                    <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                    <input type="time" class="form-control" v-model="slot.to_time" placeholder="To Time">
+                    <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="form_btns">
+                      <button type="button" class="btn btn-default delete_btn" data-dismiss="modal" @click="cancelSingleSlot">
+                        <img src="../assets/img/delete_icon.png" />
+                      </button>
+                      <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal" ref="edit_single_slot_modal">
+                        <img src="../assets/img/cancel_icon.png" />
+                      </button>
+                      <button type="button" class="btn btn-primary save_btn" @click="updateSingleSlot">
+                        <img src="../assets/img/save_icon.png" />
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            <div role="tabpanel" class="tab-pane" id="edit_profile">
+            <div class="single_slot">
+              <form>
+              <div class="row">
+              <div class="col-md-12">
+                <div class="grnd_slct">
+                <select v-model="slot_sc.gr_name">
+                  <option value="select">Select</option>
+                  <option v-for="ground in grounds" :value="ground.name">{{ ground.name }}</option>
+                </select>
+                </div>
+              </div>
+              </div>
+                <div class="row">
+                <div class="col-md-6">
+                <div class="form-group has-feedback">
+                <input type="date" class="form-control" v-model="slot_sc.start_date" placeholder="Start Date">
+                <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group has-feedback">
+                <input type="date" class="form-control" v-model="slot_sc.end_date" placeholder="End Date">
+                <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
+                </div>
+                </div>
+
+                </div>
+                <div class="row">
+                <div class="col-md-6">
+                <div class="form-group has-feedback">
+                <input type="time" class="form-control" v-model="slot_sc.from_time" placeholder="From Time">
+                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                </div>
+                </div>
+
+                <div class="col-md-6">
+                <div class="form-group has-feedback">
+                <input type="time" class="form-control" v-model="slot_sc.to_time" placeholder="To Time">
+                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
+                </div>
+                </div>
+                </div>
+                <div class="row">
+                  <div class="week_check">
+                  <ul class="week_chck_box">
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check1"  v-model="slot_sc.week_days" name="check" value="Mon">
+                  <label for="check1"></label>
+                  </div>
+                  <span>Mon</span>
+                  </li>
+
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check2"  v-model="slot_sc.week_days" name="check" value="Tue">
+                  <label for="check2"></label>
+                  </div>
+                  <span>Tue</span>
+                  </li>
+
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check3"  v-model="slot_sc.week_days" name="check" value="Wed">
+                  <label for="check3"></label>
+                  </div>
+                  <span>Wed</span> 
+                  </li>
+
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check4"  v-model="slot_sc.week_days" name="check" value="Thu">
+                  <label for="check4"></label>
+                  </div>
+                  <span>Thu</span>
+                  </li>
+
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check5"  v-model="slot_sc.week_days" name="check" value="Fri"><!-- checked -->
+                  <label for="check5"></label>
+                  </div>
+                  <span>Fri</span>
+                  </li>
+
+                  <li>
+                  <div class="check_div">
+                  <input type="checkbox" id="check6"  v-model="slot_sc.week_days" name="check" value="Sat"><!-- checked -->
+                  <label for="check6"></label>
+                  </div>
+                  <span>Sat</span>
+                  </li>
+
+                  </ul>
+                  </div>
+                </div>
+                <div class="form_btns">
+                  <button type="button" class="btn btn-default delete_btn" data-dismiss="modal" @click="cancelSlotSchedule">
+                    <img src="../assets/img/delete_icon.png" />
+                  </button>
+                  <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal" ref="edit_slot_sche_modal">
+                    <img src="../assets/img/cancel_icon.png" />
+                  </button>
+                  <button type="button" class="btn btn-primary save_btn" @click="updateSlotSchedule">
+                    <img src="../assets/img/save_icon.png" />
+                  </button>
+                </div>
+              </form>
+            </div>
+            </div>
+            </div>
+
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- edit slot modal end -->
+
         <!-- availble slot modal start -->
       
         <div class="modal fade avilbl_slt_modal bs-example-modal-sm" id="availableSlot" tabindex="-1" role="dialog" aria-labelledby="availableSlot">
@@ -477,85 +666,6 @@
           </div>
         </div>
         <!-- reserved slot modal end -->
-
-        <!-- edit slot modal start -->
-        <div class="modal fade edit_slot_modal" id="editSlot" tabindex="-1" role="dialog" aria-labelledby="editSlotLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <img src="../assets/img/close_icon.png" />
-                </button>
-                <h4 class="modal-title" id="editSlotLabel">Edit Slot</h4>
-              </div>
-              <form>
-              <div class="modal-body">
-              <div class="edit_slot_cntnt">
-              
-              <div class="row">
-              <div class="col-md-12">
-                <div class="grnd_slct">
-                <select>
-                <option>Ground Name</option>
-                <option>Ground Name one</option>
-                <option>Ground Name two</option>
-                <option>Ground Name three</option>
-                </select>
-                </div>
-              </div>
-              </div>
-                <div class="row">
-                <div class="col-md-12">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Start Date">
-                <span class="glyphicon glyphicon-calendar form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-
-                </div>
-                <div class="row">
-                <div class="col-md-6">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="From Time">
-                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-
-                <div class="col-md-6">
-                <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="To Time">
-                <span class="glyphicon glyphicon-time form-control-feedback input_icon" aria-hidden="true"></span>
-                </div>
-                </div>
-                </div>
-                <div class="row">
-              <div class="col-md-12">
-                <div class="grnd_slct">
-                <select>
-                <option>Cricket</option>
-                <option>Cricket one</option>
-                <option>Cricket two</option>
-                <option>Cricket three</option>
-                </select>
-                </div>
-              </div>
-              </div>
-              
-            </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default cncel_btn" data-dismiss="modal">
-                  <img src="../assets/img/cancel_icon.png" />
-                </button>
-                <button type="button" class="btn btn-primary save_btn">
-                  <img src="../assets/img/save_icon.png" />
-                </button>
-              </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        <!-- edit slot modal end -->
 
         <!-- cancel slot modal start -->
         <div class="modal fade cncl_slot_modal" id="cancelSlot" tabindex="-1" role="dialog" aria-labelledby="cancelSlotLabel">
@@ -803,23 +913,26 @@ import HeaderComponent from '@/components/Header'
 import SidebarComponent from '@/components/Sidebar'
 import AppService from '@/services/AppService'
 
+var moment = require('moment');
 
 var cal_events = [
   {
-    title  : 'event1',
-    start  : '2018-08-23',
-    end  : '2018-08-27',
+    title  : 'Ground 2',
+    start  : '2018-08-30T4:30:00',
+    end  : '2018-08-30T6:30:00',
+    color : 'grey'
+  },
+  {
+    title  : 'Ground 1',
+    start  : '2018-08-29T01:30:00',
+    end    : '2018-08-29T04:30:00',
     color : 'green'
   },
   {
-    title  : 'event2',
-    start  : '2010-01-05',
-    end    : '2010-01-07',
-  },
-  {
-    title  : 'event3',
-    start  : '2018-08-20T12:30:00',
-    allDay : false
+    title  : 'Ground 3',
+    start  : '2018-08-28T03:30:00',
+    end    : '2018-08-28T07:30:00',
+    color : 'blue'
   }
 ];
 
@@ -828,11 +941,25 @@ export default {
     return {
       events: cal_events,
       grounds:[],
-      slot:{ gr_name: 'select', start_date:'', to_time:'', from_time:'' },
-      slot_sc:{ gr_name: 'select', start_date:'', to_time:'', from_time:'', week_days:[] }
+      slot:{ gr_name: 'select', start_date:'', end_date:'', to_time:'', from_time:'', color:'green' },
+      slot_sc:{ gr_name: 'select', start_date:'', to_time:'', from_time:'', week_days:[], color:'green' },
+      edited_slot_id:'',
+      chartData: [
+        ['Year', 'Sales', 'Expenses', 'Profit'],
+        ['Reserved', 1000, 400, 200],
+        ['Requested', 1170, 460, 250],
+        ['Available', 660, 1120, 300],
+      ],
+      chartOptions: {
+        chart: {
+          title: 'Company Performance',
+          subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+        }
+      }
     }
   },
   name: 'HelloWorld',
+  moment: moment,
   props: {
   },
   methods: {
@@ -844,43 +971,42 @@ export default {
     async getAvailableSlots () {
       const res = await AppService.getAvailableSlots()
       console.log('availble slots @@@', res.data)
-      let availble_slots = res.data.data;
-      for (var i = 0; i < availble_slots.length; i++) {
-        let start_date, end_date;
-          start_date = availble_slots[i].start_date +'T'+ availble_slots[i].from_time+':00'
-          end_date = availble_slots[i].end_date +'T'+ availble_slots[i].to_time+':00'
-        let obj = {
-          title: availble_slots[i].gr_name,
-          start: start_date, 
-          end : end_date,
-          color: 'green'
-        }
-        this.events.push(obj)
-      }
+      let availble_slots = res.data.data
+      if (availble_slots.length > 0) {
+        this.refreshEvents(availble_slots)
+      } 
     },
     async addSingleSlot () {
       const res = await AppService.addSingleSlot(this.slot)
       console.log('Single Slot @@@', res.data)
+      this.refreshEvents(res.data.data)
+      this.$refs.close_single_slot_modal.click()
       this.assignTimeDateOnload()
     },
     async addSlotSchedule () {
       const res = await AppService.addSlotSchedule(this.slot_sc)
       console.log('Slot Schedule @@@', res.data)
+      this.refreshEvents(res.data.data)
+      this.$refs.close_slot_sc_modal.click()
       this.assignTimeDateOnload()
     },
-    timeNow () {
-      var d = new Date(),
+    timeNow (param) {
+      if (param === undefined) {
+        var d = new Date(),
           h = (d.getHours()<10?'0':'') + d.getHours(),
           m = (d.getMinutes()<10?'0':'') + d.getMinutes();
-      var value = h + ':' + m;
-      return value;
+        var value = h + ':' + m;
+        return value;
+      }      
     },
-    dateNow () {
-      var now = new Date(),
+    dateNow (param) {
+      if (param === undefined) {
+        var now = new Date(),
         day = ("0" + now.getDate()).slice(-2),
         month = ("0" + (now.getMonth() + 1)).slice(-2);
-      var today = now.getFullYear()+"-"+(month)+"-"+(day)
-      return today;
+        var today = now.getFullYear()+"-"+(month)+"-"+(day)
+        return today;
+      }      
     },
     assignTimeDateOnload () {
       let time = this.timeNow()
@@ -891,6 +1017,85 @@ export default {
       this.slot_sc.from_time = time
       this.slot_sc.start_date = this.dateNow()
       this.slot_sc.end_date = this.dateNow()
+    },
+    refreshEvents (availble_slots) {
+      if (availble_slots.length > 0) {
+        for (var i = 0; i < availble_slots.length; i++) {
+          let start_date, end_date;
+            start_date = availble_slots[i].start_date +'T'+ availble_slots[i].from_time+':00'
+            end_date = availble_slots[i].end_date === '' ? availble_slots[i].start_date +'T'+ availble_slots[i].to_time+':00' : availble_slots[i].end_date +'T'+ availble_slots[i].to_time+':00'
+          let obj = {
+            title: availble_slots[i].gr_name,
+            start: start_date, 
+            resourceId:availble_slots[i]._id,
+            end : end_date,
+            color:availble_slots[i].color
+          }
+          this.events.push(obj)
+        }
+      } else {
+        let start_date, end_date;
+            start_date = availble_slots.start_date +'T'+ availble_slots.from_time+':00'
+            end_date = availble_slots.end_date === '' ? availble_slots.start_date +'T'+ availble_slots.to_time+':00' : availble_slots.end_date +'T'+ availble_slots.to_time+':00'
+        let obj = {
+          title: availble_slots.gr_name,
+          start: start_date, 
+          resourceId:availble_slots._id,
+          end : end_date,
+          color:availble_slots.color
+        }
+        this.events.push(obj)
+      }
+      
+    },
+    slotSelected (event) {
+      console.log('selected event @@@@@', event);
+      let slot = event;
+
+      this.edited_slot_id = slot.resourceId
+      this.slot.gr_name = slot.title
+      this.slot.start_date = moment(slot.start).format('YYYY-MM-DD')
+      this.slot.from_time = moment(slot.start).format('HH:mm')
+      this.slot.to_time = moment(slot.end).format('HH:mm')
+      this.slot_sc.gr_name = slot.title
+      this.slot_sc.start_date = moment(slot.start).format('YYYY-MM-DD')
+      this.slot_sc.end_date = moment(slot.end).format('YYYY-MM-DD')
+      this.slot_sc.from_time = moment(slot.start).format('HH:mm')
+      this.slot_sc.to_time = moment(slot.end).format('HH:mm')
+
+      this.$refs.edit_slot_btn.click()
+    },
+    async updateSingleSlot () {
+      this.slot._id = this.edited_slot_id
+      console.log('updated slot @@@@@', this.slot)
+      const res = await AppService.updateSingleSlot(this.slot)
+      console.log('Single Slot @@@', res.data)
+      this.$refs.edit_single_slot_modal.click()
+      this.events = []
+      this.refreshEvents(res.data.data)
+    },
+    async updateSlotSchedule () {
+      this.slot_sc._id = this.edited_slot_id
+      console.log('updated slot @@@@@', this.slot_sc)
+      const res = await AppService.updateSlotSchedule(this.slot_sc)
+      console.log('Slot Schedule @@@', res.data)
+      this.$refs.edit_slot_sche_modal.click()
+      this.events = []
+      this.refreshEvents(res.data.data)
+    },
+    async cancelSlotSchedule () {
+      let data = { _id: this.edited_slot_id }
+      const res = await AppService.cancelSlotSchedule(data)
+      console.log('cancel slot schedule @@@@', res.data)
+      this.events = []
+      this.refreshEvents(res.data.data)
+    },
+    async cancelSingleSlot () {
+      let data = { _id: this.edited_slot_id }
+      const res = await AppService.cancelSingleSlot(data)
+      console.log('cancel single slot @@@@', res.data)
+      this.events = []
+      this.refreshEvents(res.data.data)
     }
   },
   mounted () {
